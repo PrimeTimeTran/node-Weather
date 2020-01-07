@@ -12,7 +12,6 @@ weatherForm.addEventListener("submit", async e => {
     `/weather?address=${search}`
   );
   const data = await response.json();
-  console.log("data", data);
   if (data) {
     messageOne.textContent = data.location;
     messageTwo.textContent = data.forecast;
