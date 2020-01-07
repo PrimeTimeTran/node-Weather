@@ -1,7 +1,10 @@
 const request = require("request");
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const forecast = (lat, long, callback) => {
-  const url = `https://api.darksky.net/forecast/80bc852a8251701f5f77c60e8876363b/${lat},${long}`;
+  const url = `https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${lat},${long}`;
 
   request({ url, json: true }, (error, { body }) => {
     if (error) {
@@ -15,7 +18,6 @@ const forecast = (lat, long, callback) => {
           data: [{ summary, temperatureHigh, temperatureLow }]
         }
       } = body;
-      console.log({body});
 
       callback(undefined, {
         summary: `${summary} It's currently ${temperature} degrees out. Today's high is ${temperatureHigh} and today's low is ${temperatureLow}. There is ${precipProbability} chance of rain.`
@@ -27,7 +29,7 @@ const forecast = (lat, long, callback) => {
 const geocode = (address, callback) => {
   const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
     address
-  )}.json?access_token=pk.eyJ1IjoicHJpbWV0aW1ldHJhbiIsImEiOiJjano0N3hnNmQwNTZ1M2VwbWt6eTZ2cjh1In0.qPgFE-kkU3DnxOWbRsd7gw`;
+  )}.json?access_token=${process.env.MAPBOX_API_KEY}`;
   request({ url, json: true }, (error, response) => {
     if (error) {
       callback("Unable to connect to location services.");
