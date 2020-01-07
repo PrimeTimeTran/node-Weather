@@ -1,0 +1,85 @@
+const { geocode, forecast } = require("./utils/geocode");
+
+const path = require("path");
+const express = require("express");
+const hbs = require("hbs");
+
+const app = express();
+
+const publicDirectoryPath = path.join(__dirname, "../public");
+const viewsPath = path.join(__dirname, "../templates/views");
+const partialsPath = path.join(__dirname, "../templates/partials");
+
+app.set("view engine", "hbs");
+app.set("views", viewsPath);
+hbs.registerPartials(partialsPath);
+
+app.use(express.static(publicDirectoryPath));
+
+app.get("", (req, res) => {
+  res.render("index", {
+    title: "Home",
+    name: "Loi Tran"
+  });
+});
+
+app.get("/about", (req, res) => {
+  res.render("about", {
+    title: "About",
+    name: "Loi Tran"
+  });
+});
+
+app.get("/help", (req, res) => {
+  res.render("help", {
+    title: "Help",
+    name: "Me"
+  });
+});
+
+app.get("/weather", (req, res) => {
+  console.log("Getting some weather Data", !req.query.address);
+  if (!req.query.address) {
+    res.send({
+      error: "You must provide a address term"
+    });
+  }
+
+
+
+  geocode(req.query.address, (error, { latitude, longitude, location }) => {
+    if (error) {
+      return console.log(error);
+    }
+    forecast(latitude, longitude, (error, { summary }) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Location: ", location);
+      console.log("Forecast Data: ", summary);
+      res.send({
+        location,
+        forecast: summary,
+        address: req.query.address
+      });
+    });
+  });
+});
+
+app.get("/help/*", (req, res) => {
+  res.render("404", {
+    errorMessage: "Help article not found.",
+    name: "Me"
+  });
+});
+
+app.get("*", (req, res) => {
+  res.render("404", {
+    errorMessage: "Page not found.",
+    name: "Me"
+  });
+});
+
+app.listen(3000, () => {
+  console.log("Server is up on port 3000.");
+});
