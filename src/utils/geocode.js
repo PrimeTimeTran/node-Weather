@@ -1,6 +1,6 @@
 const request = require("request");
 
-const config = require('../../config')
+const config = require("../../config");
 
 const forecast = (lat, long, callback) => {
   const url = `https://api.darksky.net/forecast/${config.DARKSKY_API_KEY}/${lat},${long}`;

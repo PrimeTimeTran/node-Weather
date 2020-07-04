@@ -20,29 +20,29 @@ app.use(express.static(publicDirectoryPath));
 app.get("", (req, res) => {
   res.render("index", {
     title: "Home",
-    name: "Loi Tran"
+    name: "Loi Tran",
   });
 });
 
 app.get("/about", (req, res) => {
   res.render("about", {
     title: "About",
-    name: "Loi Tran"
+    name: "Loi Tran",
   });
 });
 
 app.get("/help", (req, res) => {
   res.render("help", {
     title: "Help",
-    name: "Me"
+    name: "Me",
   });
 });
 
 app.get("/weather", (req, res) => {
-  console.log('res', { req: req.query });
+  console.log("res", { req: req.query });
   if (!req.query.address && !req.query.coords) {
     res.send({
-      error: "You must provide a address term or coords"
+      error: "You must provide a address term or coords",
     });
   }
 
@@ -59,7 +59,7 @@ app.get("/weather", (req, res) => {
           location,
           title: "Weather",
           forecast: summary,
-          address: req.query.address
+          address: req.query.address,
         });
       });
     });
@@ -71,7 +71,7 @@ app.get("/weather", (req, res) => {
       res.send({
         title: "Weather",
         forecast: summary,
-        address: req.query.address
+        address: req.query.address,
       });
     });
   }
@@ -80,14 +80,14 @@ app.get("/weather", (req, res) => {
 app.get("/help/*", (req, res) => {
   res.render("404", {
     errorMessage: "Help article not found.",
-    name: "Me"
+    name: "Me",
   });
 });
 
 app.get("*", (req, res) => {
   res.render("404", {
     name: "Me",
-    errorMessage: "Page not found."
+    errorMessage: "Page not found.",
   });
 });
 
